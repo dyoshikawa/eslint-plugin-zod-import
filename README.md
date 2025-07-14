@@ -4,7 +4,7 @@ ESLint plugin to enforce Zod import best practices
 
 ## Overview
 
-This plugin enforces the use of `zod/v4` or `zod/v4-mini` instead of the legacy `zod` package when importing the Zod library.
+This plugin enforces the use of `zod` or `zod-mini` imports for better bundle size optimization and clearer module selection.
 
 ## Installation
 
@@ -62,7 +62,7 @@ export default [
 
 ### `zod-import/zod-import`
 
-Detects imports from `zod` or `zod/v4` and enforces the use of the appropriate version.
+Detects imports from various Zod packages and enforces the use of the appropriate variant. Also automatically converts legacy imports from `zod/v4` and `zod/v4-mini` to the new format.
 
 #### Options
 
@@ -70,30 +70,32 @@ The rule accepts the following options:
 
 ```javascript
 {
-  "zod-import/zod-import": ["error", { "version": "zod-v4-mini" }]
+  "zod-import/zod-import": ["error", { "variant": "zod" }]
 }
 ```
 
-- `version`: Zod version to use
-  - `"zod-v4-mini"` (default): For minimal bundle size
-  - `"zod-v4"`: Full-featured version
+- `variant`: Zod variant to use
+  - `"zod"` (default): Full-featured version
+  - `"zod-mini"`: For minimal bundle size
 
 #### Examples
 
 ❌ **Incorrect**:
 ```javascript
-import { z } from 'zod';
-import { z } from 'zod/v4';
+import { z } from 'zod-mini';      // When variant: "zod" (default)
+import { z } from 'zod';           // When variant: "zod-mini"
+import { z } from 'zod/v4';        // Legacy format
+import { z } from 'zod/v4-mini';   // Legacy format
 ```
 
 ✅ **Correct** (default configuration):
 ```javascript
-import { z } from 'zod/v4-mini';
+import { z } from 'zod';
 ```
 
-✅ **Correct** (when `version: "zod-v4"` is configured):
+✅ **Correct** (when `variant: "zod-mini"` is configured):
 ```javascript
-import { z } from 'zod/v4';
+import { z } from 'zod-mini';
 ```
 
 ## Auto-fix

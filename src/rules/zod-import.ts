@@ -1,17 +1,17 @@
 import type { Rule } from "eslint";
 import type { ImportDeclaration } from "estree";
 
-type ZodVersion = "zod-v4" | "zod-v4-mini";
+type ZodVariant = "zod" | "zod-mini";
 
 interface RuleOptions {
-  version: ZodVersion;
+  variant: ZodVariant;
 }
 
 export const zodImportRule: Rule.RuleModule = {
   meta: {
     type: "problem",
     docs: {
-      description: "Enforce using zod/v4 or zod/v4-mini instead of zod",
+      description: "Enforce using zod or zod-mini imports",
       category: "Best Practices",
       recommended: true,
     },
@@ -20,23 +20,23 @@ export const zodImportRule: Rule.RuleModule = {
       {
         type: "object",
         properties: {
-          version: {
+          variant: {
             type: "string",
-            enum: ["zod-v4", "zod-v4-mini"],
+            enum: ["zod", "zod-mini"],
           },
         },
         additionalProperties: false,
       },
     ],
     messages: {
-      useZodV4: 'Use "zod/v4" instead of "{{actual}}" for better compatibility',
-      useZodV4Mini: 'Use "zod/v4-mini" instead of "{{actual}}" for reduced bundle size',
+      useZod: 'Use "zod" instead of "{{actual}}" for full features',
+      useZodMini: 'Use "zod-mini" instead of "{{actual}}" for reduced bundle size',
     },
   },
 
   create(context) {
     const options: RuleOptions | undefined = context.options[0];
-    const version = options?.version ?? "zod-v4-mini";
+    const variant = options?.variant ?? "zod";
 
     return {
       ImportDeclaration(node: ImportDeclaration) {
@@ -46,14 +46,21 @@ export const zodImportRule: Rule.RuleModule = {
           return;
         }
 
-        if (source === "zod" || source === "zod/v4" || source === "zod/v4-mini") {
-          const targetImport = version === "zod-v4" ? "zod/v4" : "zod/v4-mini";
+        // Check if this is a zod-related import (including legacy formats)
+        if (
+          source === "zod" ||
+          source === "zod-mini" ||
+          source === "zod/v4" ||
+          source === "zod/v4-mini"
+        ) {
+          const targetImport = variant === "zod" ? "zod" : "zod-mini";
 
+          // If already using the correct import, skip
           if (source === targetImport) {
             return;
           }
 
-          const messageId = version === "zod-v4" ? "useZodV4" : "useZodV4Mini";
+          const messageId = variant === "zod" ? "useZod" : "useZodMini";
 
           context.report({
             node: node.source,
