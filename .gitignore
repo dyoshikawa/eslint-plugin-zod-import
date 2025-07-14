@@ -168,3 +168,5 @@ pnpm-workspace.yaml
 .claude/settings.local.json
 
 .pnpm-store
+
+ai-tmp
