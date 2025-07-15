@@ -20,7 +20,7 @@ ruleTester.run("zod-import", zodImportRule, {
       options: [{ variant: "zod" }],
     },
     {
-      code: 'import { z } from "zod-mini"',
+      code: 'import { z } from "zod/mini"',
       options: [{ variant: "zod-mini" }],
     },
     {
@@ -31,32 +31,11 @@ ruleTester.run("zod-import", zodImportRule, {
   invalid: [
     // Default behavior (prefer zod)
     {
-      code: 'import { z } from "zod-mini"',
+      code: 'import { z } from "zod/mini"',
       errors: [
         {
           messageId: "useZod",
-          data: { actual: "zod-mini" },
-        },
-      ],
-      output: 'import { z } from "zod"',
-    },
-    // Legacy imports should be converted to new format
-    {
-      code: 'import { z } from "zod/v4"',
-      errors: [
-        {
-          messageId: "useZod",
-          data: { actual: "zod/v4" },
-        },
-      ],
-      output: 'import { z } from "zod"',
-    },
-    {
-      code: 'import { z } from "zod/v4-mini"',
-      errors: [
-        {
-          messageId: "useZod",
-          data: { actual: "zod/v4-mini" },
+          data: { actual: "zod/mini" },
         },
       ],
       output: 'import { z } from "zod"',
@@ -71,47 +50,15 @@ ruleTester.run("zod-import", zodImportRule, {
           data: { actual: "zod" },
         },
       ],
-      output: 'import { z } from "zod-mini"',
-    },
-    {
-      code: 'import { z } from "zod/v4"',
-      options: [{ variant: "zod-mini" }],
-      errors: [
-        {
-          messageId: "useZodMini",
-          data: { actual: "zod/v4" },
-        },
-      ],
-      output: 'import { z } from "zod-mini"',
-    },
-    {
-      code: 'import { z } from "zod/v4-mini"',
-      options: [{ variant: "zod-mini" }],
-      errors: [
-        {
-          messageId: "useZodMini",
-          data: { actual: "zod/v4-mini" },
-        },
-      ],
-      output: 'import { z } from "zod-mini"',
+      output: 'import { z } from "zod/mini"',
     },
     // Star imports
     {
-      code: 'import * as z from "zod-mini"',
+      code: 'import * as z from "zod/mini"',
       errors: [
         {
           messageId: "useZod",
-          data: { actual: "zod-mini" },
-        },
-      ],
-      output: 'import * as z from "zod"',
-    },
-    {
-      code: 'import * as z from "zod/v4"',
-      errors: [
-        {
-          messageId: "useZod",
-          data: { actual: "zod/v4" },
+          data: { actual: "zod/mini" },
         },
       ],
       output: 'import * as z from "zod"',
