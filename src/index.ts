@@ -4,7 +4,7 @@ import { zodImportRule } from "./rules/zod-import.js";
 const plugin: ESLint.Plugin = {
   meta: {
     name: "eslint-plugin-zod-import",
-    version: "0.2.0",
+    version: "0.3.0",
   },
   rules: {
     "zod-import": zodImportRule,
