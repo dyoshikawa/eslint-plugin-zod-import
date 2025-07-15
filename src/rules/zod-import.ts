@@ -30,7 +30,7 @@ export const zodImportRule: Rule.RuleModule = {
     ],
     messages: {
       useZod: 'Use "zod" instead of "{{actual}}" for full features',
-      useZodMini: 'Use "zod-mini" instead of "{{actual}}" for reduced bundle size',
+      useZodMini: 'Use "zod/mini" instead of "{{actual}}" for reduced bundle size',
     },
   },
 
@@ -47,13 +47,8 @@ export const zodImportRule: Rule.RuleModule = {
         }
 
         // Check if this is a zod-related import (including legacy formats)
-        if (
-          source === "zod" ||
-          source === "zod-mini" ||
-          source === "zod/v4" ||
-          source === "zod/v4-mini"
-        ) {
-          const targetImport = variant === "zod" ? "zod" : "zod-mini";
+        if (source === "zod" || source === "zod/mini") {
+          const targetImport = variant === "zod" ? "zod" : "zod/mini";
 
           // If already using the correct import, skip
           if (source === targetImport) {
